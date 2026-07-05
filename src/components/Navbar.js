@@ -46,7 +46,7 @@ export default function Navbar() {
           <div className="flex flex-col text-xl font-bold tracking-wide text-white">
             Rapid Laundromat
             <span className="text-[10px] font-medium tracking-[0.25em] text-sky-400">
-              Premium, Reliable & Professional Laundry Services
+              Wash +
             </span>
           </div>
         </Link>

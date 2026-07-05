@@ -29,17 +29,17 @@ const whyItems = [
 
 export default function Why() {
   return (
-    <section id="why" className="bg-foam px-[5%] py-[90px]">
-      <div className="mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <section id="why" className="bg-foam px-[5%] py-22.5">
+      <div className="mx-auto grid max-w-275 grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
         {/* Visual side — hidden on mobile, like original */}
         <div className="relative hidden items-center justify-center lg:flex">
           <div
-            className="relative flex h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-full shadow-[0_20px_50px_rgba(0,16,80,.25)] [animation:smoothPulse_4s_ease-in-out_infinite]"
+            className="relative flex h-75 w-75 items-center justify-center overflow-hidden rounded-full shadow-[0_20px_50px_rgba(0,16,80,.25)] animate-[smoothPulse_4s_ease-in-out_infinite]"
             style={{
               background: "linear-gradient(145deg, #002060, #0C7570, #001050)",
             }}
           >
-            <div className="absolute inset-[5px] rounded-full border border-dashed border-white/20 [animation:spin_30s_linear_infinite]" />
+            <div className="absolute inset-1.25 rounded-full border border-dashed border-white/20 animate-[spin_30s_linear_infinite]" />
             <Image
               src="/images/logo.jpeg"
               alt="Rapid Laundromat"
@@ -56,19 +56,19 @@ export default function Why() {
 
           {/* floating badges */}
           <div
-            className="absolute right-[-10px] top-[8%] flex animate-float items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)]"
+            className="absolute right-2.5 top-[8%] flex animate-float items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)]"
           >
             <span className="h-2 w-2 rounded-full bg-bright" />
             Open Today
           </div>
           <div
-            className="absolute bottom-[12%] left-[-20px] flex items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)] [animation:float_5s_ease-in-out_infinite] [animation-delay:2.5s]"
+            className="absolute bottom-[12%] left-5 flex items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)] animate-[float_5s_ease-in-out_infinite] [animation-delay:2.5s]"
           >
             <span className="h-2 w-2 rounded-full bg-brandGreen" />
             5★ Rated
           </div>
           <div
-            className="absolute right-[-25px] top-[45%] flex items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)] [animation:float_5s_ease-in-out_infinite] [animation-delay:1.2s]"
+            className="absolute right-6.25 top-[45%] flex items-center gap-[.45rem] rounded-lg bg-white px-4 py-[.65rem] text-[.82rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.1)] animate-[float_5s_ease-in-out_infinite] [animation-delay:1.2s]"
           >
             <span className="h-2 w-2 rounded-full bg-bright" />
             2 Branches
@@ -84,7 +84,7 @@ export default function Why() {
             Trusted by Families &<br />
             Businesses Across Sri Lanka
           </h2>
-          <p className="max-w-[560px] text-[.97rem] leading-[1.85] text-muted">
+          <p className="max-w-140 text-[.97rem] leading-[1.85] text-muted">
             We&apos;re more than a laundry — we&apos;re your community
             service partner who genuinely cares about your garments.
           </p>
@@ -92,7 +92,7 @@ export default function Why() {
           <ul className="mt-7 flex flex-col gap-[1.1rem]">
             {whyItems.map((item) => (
               <li key={item.title} className="flex items-start gap-[.9rem]">
-                <div className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-accent to-bright text-[.95rem] text-white">
+                <div className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-accent to-bright text-[.95rem] text-white">
                   ✓
                 </div>
                 <div>
