@@ -10,6 +10,8 @@ import Commercial from "@/components/Commercial";
 import Booking from "@/components/Booking";
 import Tech from "@/components/Tech";
 import Gallery from "@/components/Gallery";
+import Values from "@/components/Values";
+import Reviews from "@/components/Reviews";
 
 export default function Home() {
   return (
@@ -27,6 +29,8 @@ export default function Home() {
         <Booking />
         <Tech />
         <Gallery />
+        <Values />
+        <Reviews />
       </main>
     </>
   );
