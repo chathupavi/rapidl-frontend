@@ -8,6 +8,8 @@ import Signature from "@/components/Signature";
 import Why from "@/components/Why";
 import Commercial from "@/components/Commercial";
 import Booking from "@/components/Booking";
+import Tech from "@/components/Tech";
+import Gallery from "@/components/Gallery";
 
 export default function Home() {
   return (
@@ -23,6 +25,8 @@ export default function Home() {
         <Why />
         <Commercial />
         <Booking />
+        <Tech />
+        <Gallery />
       </main>
     </>
   );
