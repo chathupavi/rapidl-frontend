@@ -9,9 +9,19 @@ import Why from "@/components/Why";
 import Commercial from "@/components/Commercial";
 import Booking from "@/components/Booking";
 import Tech from "@/components/Tech";
+import Founder from "@/components/Founder";
 import Gallery from "@/components/Gallery";
 import Values from "@/components/Values";
 import Reviews from "@/components/Reviews";
+import Locations from "@/components/Locations";
+import Vision from "@/components/Vision";
+import SeoPages from "@/components/SeoPages";
+import Delivery from "@/components/Delivery";
+import Faq from "@/components/Faq";
+import Social from "@/components/Social";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 export default function Home() {
   return (
@@ -28,10 +38,20 @@ export default function Home() {
         <Commercial />
         <Booking />
         <Tech />
+        <Founder />
         <Gallery />
         <Values />
         <Reviews />
+        <Locations />
+        <Vision />
+        <SeoPages />
+        <Delivery />
+        <Faq />
+        <Social />
+        <Contact />
       </main>
+      <Footer />
+      <WhatsAppFloat />
     </>
   );
 }

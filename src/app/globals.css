@@ -73,3 +73,21 @@ body {
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
+
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,.5); }
+  50% { box-shadow: 0 6px 36px rgba(37,211,102,.75); }
+}
+
+::-webkit-scrollbar {
+width:6px;
+}
+
+::-webkit-scrollbar-thumb {
+background:rgba(255,255,255,.15);
+border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background:#00d9ff;
+}
