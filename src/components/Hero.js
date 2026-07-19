@@ -1,6 +1,35 @@
 import Image from "next/image";
 
-export default function Hero() {
+function HighlightText({ text, highlight }) {
+  if (!highlight) return text;
+
+  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
+
+  return parts.map((part, index) =>
+    part.toLowerCase() === highlight.toLowerCase() ? (
+      <span
+        key={index}
+        className="bg-linear-to-br from-bright via-[#4fc3f7] to-light bg-clip-text text-transparent"
+      >
+        {part}
+      </span>
+    ) : (
+      part
+    )
+  );
+}
+
+export default function Hero({ data = {} }) {
+    const {
+    logo = "/images/logo.jpeg",
+    badge,
+    heading,
+    headingHighlight,
+    subheading,
+    description,
+    infoTags = [],
+    buttons = {},
+  } = data;
   return (
     <section
       id="hero"
@@ -52,21 +81,21 @@ export default function Hero() {
             className="h-37.5 w-37.5 rounded-full object-contain"
           />
         </div>
-
+     {badge && (
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[rgba(0,112,208,.4)] bg-[rgba(0,96,208,.2)] px-4 py-[.38rem] text-[.72rem] font-bold uppercase tracking-[3px] text-[rgba(180,210,255,.9)]">
           <span className="h-1.5 w-1.5 animate-blink rounded-full bg-[#4fc3f7] shadow-[0_0_8px_#4fc3f7]" />
-          Sri Lanka&apos;s Premium Garment Care Partner
+          {badge}
         </div>
-
-        <h1 className="mb-[.6rem] text-[clamp(2.2rem,6vw,5.5rem)] font-black uppercase leading-[1.05] tracking-[2px] text-white" style={{ fontFamily: "var(--font-barlow-condensed)" }}>
-          Sri Lanka&apos;s Premium
-          <br />
-          <span className="bg-linear-to-br from-bright via-[#4fc3f7] to-light bg-clip-text text-transparent">
-            Garment Care
-          </span>{" "}
-          &<br />
-          Commercial Laundry Partner
-        </h1>
+      )}
+       <h1
+         className="mb-[.6rem] text-[clamp(2.2rem,6vw,5.5rem)] font-black uppercase leading-[1.05] tracking-[2px] text-white"
+         style={{ fontFamily: "var(--font-barlow-condensed)" }}
+       >
+         <HighlightText
+           text={heading}
+           highlight={headingHighlight}
+         />
+       </h1>
 
         <p className="mx-auto mb-5 max-w-170 text-[clamp(.95rem,2vw,1.2rem)] font-normal leading-[1.7] tracking-[.5px] text-[rgba(200,225,255,.8)]">
           Trusted by families, hotels, restaurants and businesses for

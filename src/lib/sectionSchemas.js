@@ -2,6 +2,7 @@
 // Supported field types: text, textarea, image, select, color, number, repeater
 // repeater.fields only supports one level of nesting (text/textarea/select/image/number)
 
+
 export const sectionSchemas = {
   hero: {
     label: "Hero",
@@ -445,6 +446,26 @@ export const sectionSchemas = {
   },
 };
 
+export const sectionSchemasWithKeys = Object.fromEntries(
+
+  Object.entries(sectionSchemas).map(([key, section]) => [
+
+    key,
+
+    {
+      key: key,
+      ...section,
+    }
+
+  ])
+
+);
+
+
+// Get schema with key included
+
 export function getSectionSchema(slug) {
-  return sectionSchemas[slug] || null;
-}
+
+  return sectionSchemasWithKeys[slug] || null;
+
+};

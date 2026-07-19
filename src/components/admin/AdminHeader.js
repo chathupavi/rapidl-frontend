@@ -30,9 +30,33 @@ export default function AdminHeader() {
   const pathname = usePathname();
   const title = getSectionTitleFromPath(pathname);
 
-  const handleLogout = () => {
-    console.log("Logout clicked");
-  };
+ const handleLogout = async () => {
+ 
+   try {
+ 
+     await fetch(
+       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`,
+       {
+         method:"POST",
+         credentials:"include",
+       }
+     );
+ 
+ 
+     window.location.href="/login";
+ 
+ 
+   }
+   catch(error){
+ 
+     console.error(
+       "Logout failed:",
+       error
+     );
+ 
+   }
+ 
+ };
 
   return (
     <header className="relative z-20 flex items-center justify-between border-b border-white/10 bg-white/70 px-8 py-4 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,.04)]">

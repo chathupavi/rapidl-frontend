@@ -22,13 +22,15 @@ import Social from "@/components/Social";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { getSection } from "@/lib/getSection";
 
-export default function Home() {
+export default async  function Home() {
+  const hero = await getSection("hero"); 
   return (
     <>
       <Navbar />
       <main>
-        <Hero />
+        <Hero data={hero} />
         <StatsStrip />
         <ValuesBanner />
         <Trust />

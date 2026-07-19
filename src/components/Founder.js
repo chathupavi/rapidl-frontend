@@ -1,7 +1,7 @@
 export default function Founder() {
   return (
-    <section id="founder" className="bg-white px-[5%] py-[90px]">
-      <div className="mx-auto max-w-[1100px]">
+    <section id="founder" className="bg-white px-[5%] py-22.5">
+      <div className="mx-auto max-w-275">
         <p className="mb-[.6rem] text-[.7rem] font-extrabold uppercase tracking-[4px] text-bright">
           Meet Our Founder
         </p>
@@ -12,18 +12,18 @@ export default function Founder() {
         </h2>
       </div>
 
-      <div className="mx-auto mt-10 grid max-w-[1100px] grid-cols-1 items-center gap-14 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+      <div className="mx-auto mt-10 grid max-w-275 grid-cols-1 items-center gap-14 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
         {/* Photo */}
         <div className="relative flex justify-center lg:block">
           <div
-            className="relative flex aspect-[3/4] w-full max-w-[340px] items-center justify-center overflow-hidden rounded-2xl text-[5rem] shadow-[0_20px_55px_rgba(0,64,160,.25)]"
+            className="relative flex aspect-3/4 w-full max-w-85 items-center justify-center overflow-hidden rounded-2xl text-[5rem] shadow-[0_20px_55px_rgba(0,64,160,.25)]"
             style={{
               background: "linear-gradient(145deg, #002060, #0040B0, #0060D0)",
             }}
           >
             👨‍💼
           </div>
-          <div className="absolute -bottom-[18px] left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-lg bg-white px-5 py-[.65rem] text-[.8rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.12)]">
+          <div className="absolute -bottom-4.5 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-lg bg-white px-5 py-[.65rem] text-[.8rem] font-bold text-navy shadow-[0_6px_22px_rgba(0,0,0,.12)]">
             🏆 28+ Years Manufacturing & Operations
           </div>
         </div>
@@ -91,8 +91,8 @@ export default function Founder() {
       </div>
 
       {/* Co-Director strip */}
-      <div className="mx-auto mt-16 flex max-w-[1100px] flex-col items-center gap-6 rounded-xl border border-[rgba(0,64,160,.1)] bg-foam p-8 text-center sm:flex-row sm:text-left lg:gap-8">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-bright text-[2.2rem]">
+      <div className="mx-auto mt-16 flex max-w-275 flex-col items-center gap-6 rounded-xl border border-[rgba(0,64,160,.1)] bg-foam p-8 text-center sm:flex-row sm:text-left lg:gap-8">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-accent to-bright text-[2.2rem]">
           👩‍💼
         </div>
         <div>

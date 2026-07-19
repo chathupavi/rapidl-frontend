@@ -76,7 +76,7 @@ export default function LoginForm() {
 
   return (
     <div
-      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#001050] px-4 py-8 sm:px-6 lg:px-8"
+      className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-navy px-4 py-8 sm:px-6 lg:px-8"
       style={{
         background:
           "linear-gradient(145deg, #001050 0%, #002060 40%, #0040B0 75%, #0060D0 100%)",
@@ -95,12 +95,12 @@ export default function LoginForm() {
       <motion.div
         animate={{ y: [0, -25, 0] }}
         transition={{ duration: 8, repeat: Infinity }}
-        className="absolute -left-20 top-[10%] h-[350px] w-[350px] rounded-full border border-[rgba(79,195,247,.15)] bg-[rgba(0,96,208,.08)] blur-sm"
+        className="absolute -left-20 top-[10%] h-87.5 w-87.5 rounded-full border border-[rgba(79,195,247,.15)] bg-[rgba(0,96,208,.08)] blur-sm"
       />
       <motion.div
         animate={{ y: [0, 30, 0] }}
         transition={{ duration: 10, repeat: Infinity }}
-        className="absolute -right-[120px] bottom-[5%] h-[420px] w-[420px] rounded-full border border-[rgba(79,195,247,.15)] bg-[rgba(0,64,160,.1)]"
+        className="absolute -right-30 bottom-[5%] h-105 w-105 rounded-full border border-[rgba(79,195,247,.15)] bg-[rgba(0,64,160,.1)]"
       />
 
       <motion.div

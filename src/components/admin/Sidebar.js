@@ -114,7 +114,13 @@ export default function Sidebar() {
             className="flex items-center gap-3 rounded-2xl border border-[rgba(79,195,247,.2)] bg-white/6 p-3 backdrop-blur-xl shadow-[0_15px_40px_rgba(0,16,80,.4)]"
           >
             <div className="relative h-12 w-12 overflow-hidden rounded-xl ring-2 ring-[#4fc3f7]/30">
-              <Image src="/images/logo.jpeg" fill alt="Rapid Laundromat" className="object-cover" />
+              <Image
+                src="/images/logo.jpeg"
+                fill
+                sizes="48px"
+                alt="Rapid Laundromat"
+                className="object-cover"
+              />
             </div>
             <div>
               <h1 className="text-sm font-black uppercase tracking-wide text-white">

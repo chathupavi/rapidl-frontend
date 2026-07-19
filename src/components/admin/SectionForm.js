@@ -26,18 +26,57 @@ export default function SectionForm({ schema, initialData }) {
     if (savedMessage) setSavedMessage("");
   };
 
-  const handleSave = async () => {
+const handleSave = async () => {
+  try {
+
     setSaving(true);
-    setSavedMessage("");
 
-    console.log("Saving section data:", data);
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/sections/${schema.key}`;
 
-    setSaving(false);
+    console.log("API URL:", url);
+    console.log("Sending Data:", data);
+
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+
+    const text = await response.text();
+
+
+    console.log("STATUS:", response.status);
+    console.log("RAW RESPONSE:", text);
+
+
+    const result = JSON.parse(text);
+
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to save changes");
+    }
+
+
     setDirty(false);
     setSavedMessage("All changes saved successfully");
-  };
+
+
+  } catch(error){
+
+    console.error("Save error:",error);
+
+  }
+  finally{
+
+    setSaving(false);
+
+  }
+};
 
   const handleDiscard = () => {
     setData(initialData || {});
