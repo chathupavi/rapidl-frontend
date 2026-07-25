@@ -5,63 +5,68 @@ import SelectField from "./SelectField";
 import NumberField from "./NumberField";
 import EmojiField from "./EmojiField";
 
-// Shared switch used by both SectionForm (top-level fields)
-// and RepeaterField (nested fields inside each repeater item).
+
 export default function renderField(field, value, onChange) {
+  if (!field) {
+    return null;
+  }
+
+  const commonProps = {
+    field,
+    value: value ?? "",
+    onChange,
+  };
+
   switch (field.type) {
     case "textarea":
       return (
         <TextAreaField
           key={field.name}
-          field={field}
-          value={value}
-          onChange={onChange}
+          {...commonProps}
         />
       );
+
     case "image":
       return (
         <ImageField
           key={field.name}
-          field={field}
-          value={value}
-          onChange={onChange}
+          {...commonProps}
         />
       );
+
     case "select":
       return (
         <SelectField
           key={field.name}
-          field={field}
-          value={value}
-          onChange={onChange}
+          {...commonProps}
         />
       );
+
     case "number":
       return (
         <NumberField
           key={field.name}
-          field={field}
-          value={value}
+          {...commonProps}
+        />
+      );
+
+    case "emoji":
+      return (
+        <EmojiField
+          key={field.name}
+          label={field.label}
+          value={value ?? ""}
           onChange={onChange}
         />
       );
+
     case "text":
     default:
       return (
         <TextField
           key={field.name}
-          field={field}
-          value={value}
-          onChange={onChange}
+          {...commonProps}
         />
-      );
-      case "emoji":
-      return (
-       <EmojiField
-         label={field.label}
-         value={value}
-         onChange={onChange}
-       />
       );
   }
 }

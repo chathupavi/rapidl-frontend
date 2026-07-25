@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ImagePlus, UploadCloud, Replace, Trash2, Sparkles } from "lucide-react";
+import { ImagePlus, UploadCloud, Replace, Trash2, Info } from "lucide-react";
 
 export default function ImageField({ field, value, onChange }) {
   const inputRef = useRef(null);
@@ -11,12 +11,21 @@ export default function ImageField({ field, value, onChange }) {
 
   const applyFile = (file) => {
     if (!file || !file.type.startsWith("image/")) return;
+    
+    // Optional 5MB validation
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size must be less than 5MB.");
+      return;
+    }
+
     const previewUrl = URL.createObjectURL(file);
     onChange(previewUrl);
   };
 
   const handleFileChange = (e) => {
     applyFile(e.target.files?.[0]);
+    // Allow selecting the same file again
+    e.target.value = "";
   };
 
   const handleDrop = (e) => {
@@ -25,61 +34,97 @@ export default function ImageField({ field, value, onChange }) {
     applyFile(e.dataTransfer.files?.[0]);
   };
 
+  const handleRemove = () => {
+    onChange("");
+  };
+
   return (
-    <div className="flex flex-col gap-3">
-      {/* Label */}
-      <div className="flex items-center gap-2">
-        <Sparkles size={14} className="text-cyan-500" />
-        <label className="text-xs font-black uppercase tracking-[2px] text-gray-500">
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="flex w-full flex-col gap-3"
+    >
+      {/* Label Row */}
+      <div className="flex items-center gap-1">
+        <label className="text-[11px] font-extrabold uppercase tracking-[1.5px] text-gray-600">
           {field.label}
         </label>
+        {field.required && (
+          <span className="text-xs font-bold text-red-500">*</span>
+        )}
       </div>
+
+      {/* Description */}
+      {field.description && (
+        <div className="flex items-start gap-1.5 text-xs leading-5 text-gray-400">
+          <Info size={13} className="mt-0.5 shrink-0" />
+          <span>{field.description}</span>
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         {value ? (
-          /* Preview State */
+          /* Image Preview */
           <motion.div
             key="preview"
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="group relative w-fit overflow-hidden rounded-3xl border border-white/20 bg-white p-2 shadow-xl"
+            exit={{ opacity: 0, scale: 0.97 }}
+            className="group relative w-full max-w-sm overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 p-2"
           >
-            <div className="relative h-44 w-44 overflow-hidden rounded-2xl">
+            <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100">
               <Image
                 src={value}
-                alt="Preview"
+                alt={field.label || "Image preview"}
                 fill
-                sizes="176px"
-                unoptimized // Keep true for local blob URLs, remove for production remote URLs
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                sizes="384px"
+                unoptimized
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              
-              {/* Overlay Actions */}
-              <div className="absolute inset-0 z-10 flex items-center justify-center gap-3 bg-black/60 opacity-0 transition duration-300 group-hover:opacity-100">
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <button
                   type="button"
                   onClick={() => inputRef.current?.click()}
-                  className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-xs font-black uppercase tracking-wide text-gray-800 transition hover:scale-105"
+                  className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-bold text-gray-800 shadow-lg transition hover:scale-105"
                 >
-                  <Replace size={14} /> Replace
+                  <Replace size={14} />
+                  Replace
                 </button>
+
                 <button
                   type="button"
-                  onClick={() => onChange("")}
-                  className="flex items-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:scale-105"
+                  onClick={handleRemove}
+                  className="flex items-center gap-2 rounded-lg bg-red-500 px-3 py-2 text-xs font-bold text-white shadow-lg transition hover:scale-105"
                 >
-                  <Trash2 size={14} /> Remove
+                  <Trash2 size={14} />
+                  Remove
                 </button>
               </div>
             </div>
+
+            {/* Bottom Action Bar */}
+            <div className="flex items-center justify-between px-1 pt-2">
+              <span className="truncate text-[11px] font-medium text-gray-400">
+                Image selected
+              </span>
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="text-[11px] font-bold text-cyan-600 hover:text-cyan-700"
+              >
+                Change image
+              </button>
+            </div>
           </motion.div>
         ) : (
-          /* Upload State */
+          /* Upload Area */
           <motion.div
             key="upload"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             onClick={() => inputRef.current?.click()}
             onDragOver={(e) => {
               e.preventDefault();
@@ -87,37 +132,43 @@ export default function ImageField({ field, value, onChange }) {
             }}
             onDragLeave={() => setDragActive(false)}
             onDrop={handleDrop}
-            className={`relative flex h-64 w-full max-w-md cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl border-2 border-dashed transition-all duration-500 ${
+            className={`relative flex min-h-40 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-8 text-center transition-all duration-300 ${
               dragActive
-                ? "border-cyan-400 bg-cyan-50 shadow-[0_0_40px_rgba(0,200,255,.25)]"
-                : "border-gray-200 bg-white/60 hover:border-cyan-300 hover:bg-cyan-50/40"
+                ? "border-cyan-400 bg-cyan-50"
+                : "border-gray-200 bg-gray-50/50 hover:border-cyan-300 hover:bg-cyan-50/30"
             }`}
           >
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
             <motion.div
-              animate={dragActive ? { scale: 1.2, rotate: 5 } : { scale: 1 }}
-              className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-cyan-400 to-blue-600 text-white shadow-xl shadow-cyan-500/30"
+              animate={dragActive ? { scale: 1.1, y: -3 } : { scale: 1, y: 0 }}
+              className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600"
             >
-              {dragActive ? <UploadCloud size={30} /> : <ImagePlus size={30} />}
+              {dragActive ? <UploadCloud size={24} /> : <ImagePlus size={24} />}
             </motion.div>
-            <p className="text-sm font-black uppercase tracking-wide text-[#07111f]">
-              {dragActive ? "Drop image here" : "Upload Image"}
-            </p>
-            <p className="text-xs text-gray-400">Click or drag image</p>
-            <div className="rounded-full bg-gray-100 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-              PNG • JPG • WEBP • Max 5MB
+
+            <div>
+              <p className="text-sm font-bold text-[#07111f]">
+                {dragActive ? "Drop image here" : "Upload an image"}
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
+                Click to browse or drag and drop
+              </p>
             </div>
+
+            <span className="rounded-lg bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-gray-400 shadow-sm">
+              PNG • JPG • WEBP • Max 5MB
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Hidden File Input */}
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/png,image/jpeg,image/webp"
         onChange={handleFileChange}
         className="hidden"
       />
-    </div>
+    </motion.div>
   );
 }

@@ -15,12 +15,28 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="flex h-screen overflow-hidden bg-foam">
+    <div className="flex h-screen w-full overflow-hidden bg-gray-50 text-[#07111f]">
+      
+
       <Sidebar />
-      <div className="flex h-screen flex-1 flex-col overflow-hidden">
+
+      {/* =====================================================
+          MAIN APPLICATION AREA
+      ===================================================== */}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        
+        {/* Header */}
         <AdminHeader />
-        <main className="flex-1 overflow-y-auto px-8 py-8">{children}</main>
+
+        {/* Page Content */}
+        <main className="min-h-0 flex-1 overflow-y-auto">
+          <div className="w-full px-5 py-6 sm:px-6 lg:px-8 lg:py-8">
+            {children}
+          </div>
+        </main>
+        
       </div>
+      
     </div>
   );
 }

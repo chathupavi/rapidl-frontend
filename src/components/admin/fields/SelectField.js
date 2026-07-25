@@ -8,6 +8,12 @@ export default function SelectField({
   value,
   onChange,
 }) {
+  const options = Array.isArray(field.options)
+    ? field.options
+    : [];
+
+  const fieldId = `select-${field.name}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -21,16 +27,22 @@ export default function SelectField({
           <List size={13} />
         </div>
 
-        <label className="text-xs font-black uppercase tracking-[2px] text-gray-500">
+        <label
+          htmlFor={fieldId}
+          className="text-xs font-black uppercase tracking-[2px] text-gray-500"
+        >
           {field.label}
         </label>
       </div>
 
-      {/* Select */}
+      {/* Select Container */}
       <div className="group relative">
         <select
+          id={fieldId}
+          name={field.name}
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value)}
+          disabled={field.disabled || false}
           className="
             peer
             w-full
@@ -49,26 +61,54 @@ export default function SelectField({
             transition-all
             duration-300
 
+            placeholder:text-gray-300
+
             hover:border-cyan-300
 
             focus:border-cyan-400
             focus:ring-4
             focus:ring-cyan-400/10
+
+            disabled:cursor-not-allowed
+            disabled:bg-gray-100
+            disabled:text-gray-400
+            disabled:hover:border-gray-200
           "
         >
-          <option value="">Select an option...</option>
+          {/* Placeholder */}
+          <option value="">
+            {field.placeholder || "Select an option..."}
+          </option>
 
-          {field.options.map((option) => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option}
-            </option>
-          ))}
+          {/* Options */}
+          {options.map((option, index) => {
+            // Supports:
+            // "primary"
+            // OR
+            // { value: "primary", label: "Primary" }
+
+            const optionValue =
+              typeof option === "object"
+                ? option.value
+                : option;
+
+            const optionLabel =
+              typeof option === "object"
+                ? option.label
+                : option;
+
+            return (
+              <option
+                key={`${optionValue}-${index}`}
+                value={optionValue}
+              >
+                {optionLabel}
+              </option>
+            );
+          })}
         </select>
 
-        {/* Arrow */}
+        {/* Dropdown Arrow */}
         <div
           className="
             pointer-events-none
@@ -76,14 +116,24 @@ export default function SelectField({
             right-4
             top-1/2
             -translate-y-1/2
+            rounded-lg
+            bg-gray-100
+            p-1
             text-gray-400
-            transition
+            transition-all
             duration-300
-            group-focus-within:text-cyan-600
+
+            group-hover:bg-cyan-50
             group-hover:text-cyan-500
+
+            group-focus-within:bg-cyan-50
+            group-focus-within:text-cyan-600
           "
         >
-          <ChevronDown size={18} />
+          <ChevronDown
+            size={16}
+            className="transition-transform duration-300 group-focus-within:rotate-180"
+          />
         </div>
 
         {/* Focus Glow */}
@@ -102,6 +152,13 @@ export default function SelectField({
           "
         />
       </div>
+
+      {/* Optional Help Text */}
+      {field.description && (
+        <p className="text-xs font-medium text-gray-400">
+          {field.description}
+        </p>
+      )}
     </motion.div>
   );
 }
