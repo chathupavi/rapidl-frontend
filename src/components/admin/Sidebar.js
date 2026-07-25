@@ -6,241 +6,347 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard,
-  Search,
-  ChevronDown,
-  Settings,
-  BriefcaseBusiness,
-  ShieldCheck,
-  MapPin,
-  Layout,
-  Sparkles,
+  LayoutDashboard, Search, ChevronDown, Settings, ArrowUpRight, Sparkles,
+  Home, BarChart3, Target, ShieldCheck, ShoppingBag, Wrench, Zap,
+  ImageIcon, FileText, Truck, Users, HeartHandshake, Star, MessageCircle,
+  MapPin, HelpCircle, Phone, Share2, Layers3,
 } from "lucide-react";
 
+/* =========================================================
+   SITE NAVIGATION DATA
+========================================================= */
 const categories = [
   {
-    name: "Core Pages",
-    icon: Layout,
+    id: "discover",
+    number: "01",
+    name: "Discover",
+    description: "Make a strong first impression",
+    icon: Sparkles,
+    color: "from-[#4fc3f7] to-[#2196f3]",
     sections: [
-      { slug: "hero", label: "Hero" },
-      { slug: "stats-strip", label: "Stats Strip" },
-      { slug: "values-banner", label: "Values Banner" },
-      { slug: "trust", label: "Trust" },
-      { slug: "services", label: "Services" },
+      { slug: "hero", label: "Hero", description: "Homepage first impression", icon: Home },
+      { slug: "stats-strip", label: "Stats & Numbers", description: "Showcase key achievements", icon: BarChart3 },
+      { slug: "values-banner", label: "Values Banner", description: "Communicate your values", icon: Target },
+      { slug: "trust", label: "Trust", description: "Build customer confidence", icon: ShieldCheck },
     ],
   },
   {
-    name: "Business & Booking",
-    icon: BriefcaseBusiness,
+    id: "explore",
+    number: "02",
+    name: "Explore & Book",
+    description: "Show services and drive action",
+    icon: ShoppingBag,
+    color: "from-[#7c4dff] to-[#536dfe]",
     sections: [
-      { slug: "commercial", label: "Commercial" },
-      { slug: "booking", label: "Booking" },
-      { slug: "tech", label: "Technology" },
-      { slug: "founder", label: "Founder" },
-      { slug: "gallery", label: "Gallery" },
+      { slug: "services", label: "Services", description: "Your laundry services", icon: Wrench },
+      { slug: "signature", label: "Signature Care", description: "Premium care experience", icon: Sparkles },
+      { slug: "tech", label: "Technology", description: "Your technology advantage", icon: Zap },
+      { slug: "gallery", label: "Gallery", description: "Visual brand showcase", icon: ImageIcon },
+      { slug: "booking", label: "Booking", description: "Customer booking journey", icon: FileText },
+      { slug: "delivery", label: "Delivery", description: "Pickup and delivery", icon: Truck },
+      { slug: "commercial", label: "Commercial", description: "Business laundry solutions", icon: Users },
     ],
   },
   {
-    name: "Marketing & Trust",
-    icon: ShieldCheck,
+    id: "trust",
+    number: "03",
+    name: "Build Trust",
+    description: "Tell your story and earn confidence",
+    icon: HeartHandshake,
+    color: "from-[#ffb300] to-[#ff7043]",
     sections: [
-      { slug: "signature", label: "Signature Care" },
-      { slug: "why", label: "Why Choose Us" },
-      { slug: "values", label: "Core Values" },
-      { slug: "reviews", label: "Reviews" },
-      { slug: "vision", label: "Vision" },
-      { slug: "seo-pages", label: "SEO Pages" },
+      { slug: "why", label: "Why Choose Us", description: "Your competitive advantage", icon: Star },
+      { slug: "founder", label: "Founder", description: "Introduce your leadership", icon: Users },
+      { slug: "values", label: "Core Values", description: "What your brand stands for", icon: HeartHandshake },
+      { slug: "vision", label: "Vision", description: "Your future direction", icon: Target },
+      { slug: "reviews", label: "Reviews", description: "Customer experiences", icon: MessageCircle },
     ],
   },
   {
-    name: "Location & Contact",
+    id: "connect",
+    number: "04",
+    name: "Connect",
+    description: "Help customers find and contact you",
     icon: MapPin,
+    color: "from-[#00c853] to-[#00a152]",
     sections: [
-      { slug: "locations", label: "Locations" },
-      { slug: "delivery", label: "Delivery" },
-      { slug: "faq", label: "FAQ" },
-      { slug: "social", label: "Social" },
-      { slug: "contact", label: "Contact" },
-      { slug: "footer", label: "Footer" },
+      { slug: "locations", label: "Locations", description: "Where customers find you", icon: MapPin },
+      { slug: "faq", label: "FAQ", description: "Answer common questions", icon: HelpCircle },
+      { slug: "contact", label: "Contact", description: "Customer contact details", icon: Phone },
+      { slug: "social", label: "Social Media", description: "Connect across platforms", icon: Share2 },
+      { slug: "seo-pages", label: "SEO Pages", description: "Search engine visibility", icon: Search },
+      { slug: "footer", label: "Footer", description: "Global website footer", icon: Layers3 },
     ],
   },
 ];
 
+/* =========================================================
+   SIDEBAR COMPONENT
+========================================================= */
 export default function Sidebar() {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState({});
 
-  const toggleCategory = (name) => {
-    setCollapsed((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
+  // Find currently active category
+  const activeCategoryId = useMemo(() => {
+    for (const category of categories) {
+      if (category.sections.some((section) => pathname === `/admin/sections/${section.slug}`)) {
+        return category.id;
+      }
+    }
+    return null;
+  }, [pathname]);
+
+  // Automatically open active category
+  const [prevActiveId, setPrevActiveId] = useState(activeCategoryId);
+
+  if (activeCategoryId !== prevActiveId) {
+    setPrevActiveId(activeCategoryId);
+    if (activeCategoryId) {
+      setCollapsed((prev) => ({ ...prev, [activeCategoryId]: false }));
+    }
+  }
+
+  const toggleCategory = (id) => {
+    setCollapsed((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  // Search filtering
   const filteredCategories = useMemo(() => {
     if (!query.trim()) return categories;
-
     const q = query.toLowerCase();
+
     return categories
-      .map((cat) => ({
-        ...cat,
-        sections: cat.sections.filter((section) =>
-          section.label.toLowerCase().includes(q)
+      .map((category) => ({
+        ...category,
+        sections: category.sections.filter(
+          (section) =>
+            section.label.toLowerCase().includes(q) ||
+            section.description.toLowerCase().includes(q)
         ),
       }))
-      .filter((cat) => cat.sections.length);
+      .filter((category) => category.sections.length > 0);
   }, [query]);
 
   return (
     <aside
-      className="relative flex h-screen w-72 shrink-0 overflow-hidden border-r border-[rgba(79,195,247,.15)] text-white shadow-[20px_0_80px_rgba(0,16,80,.4)]"
-      style={{
-        background: "linear-gradient(180deg, #001050 0%, #002060 55%, #003080 100%)",
-      }}
+      className="relative flex h-screen w-72 shrink-0 overflow-hidden border-r border-white/10 text-white shadow-[20px_0_80px_rgba(0,16,80,.4)]"
+      style={{ background: "linear-gradient(180deg, #001050 0%, #00195f 48%, #002b75 100%)" }}
     >
-      {/* Aurora Background */}
+      {/* Ambient Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-105 w-105 rounded-full bg-bright/30 blur-[130px]" />
-        <div className="absolute -bottom-25 -right-30 h-87.5 w-87.5 rounded-full bg-[#4fc3f7]/20 blur-[120px]" />
+        <div className="absolute -left-40 -top-40 h-105 w-105 rounded-full bg-[#0060d0]/30 blur-[130px]" />
+        <div className="absolute -bottom-28 -right-24 h-87.5 w-87.5 rounded-full bg-[#4fc3f7]/15 blur-[120px]" />
+        <div className="absolute left-1/2 top-1/2 h-75 w-75 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1a237e]/20 blur-[120px]" />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 flex h-full w-full flex-col">
         {/* Brand */}
-        <div className="p-5">
+        <div className="p-4 pb-3">
           <motion.div
             whileHover={{ y: -2 }}
-            className="flex items-center gap-3 rounded-2xl border border-[rgba(79,195,247,.2)] bg-white/6 p-3 backdrop-blur-xl shadow-[0_15px_40px_rgba(0,16,80,.4)]"
+            transition={{ duration: 0.2 }}
+            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-3 shadow-[0_15px_40px_rgba(0,16,80,.35)] backdrop-blur-xl"
           >
-            <div className="relative h-12 w-12 overflow-hidden rounded-xl ring-2 ring-[#4fc3f7]/30">
-              <Image
-                src="/images/logo.jpeg"
-                fill
-                sizes="48px"
-                alt="Rapid Laundromat"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <h1 className="text-sm font-black uppercase tracking-wide text-white">
-                Rapid Laundromat
-              </h1>
-              <div className="mt-1 flex items-center gap-1 text-[10px] font-bold uppercase tracking-[3px] text-[#90caf9]">
-                <Sparkles size={10} />
-                Admin Studio
+            <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[#4fc3f7]/10 blur-2xl transition-all duration-500 group-hover:bg-[#4fc3f7]/20" />
+            
+            <div className="relative flex items-center gap-3">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl ring-1 ring-white/10 shadow-lg">
+                <Image src="/images/logo.jpeg" fill sizes="44px" alt="Rapid Laundromat" className="object-cover" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="truncate text-[13px] font-black uppercase tracking-[1px] text-white">
+                  Rapid Laundromat
+                </h1>
+                <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[2.5px] text-[#90caf9]">
+                  <Sparkles size={10} />
+                  Admin Studio
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
+        {/* Website Status */}
+        <div className="px-4 pb-3">
+          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/10 px-3 py-2">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-brandGreen shadow-[0_0_10px_rgba(34,197,94,.8)]" />
+              <span className="text-[10px] font-bold uppercase tracking-[1.5px] text-white/70">
+                Website Live
+              </span>
+            </div>
+            <Link href="/" target="_blank" className="flex items-center gap-1 text-[10px] font-bold text-[#90caf9] transition-colors hover:text-white">
+              View <ArrowUpRight size={11} />
+            </Link>
+          </div>
+        </div>
+
         {/* Dashboard Link */}
-        <div className="px-4">
+        <div className="px-4 pb-3">
           <Link
             href="/admin"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
+            className={`group relative flex items-center gap-3 overflow-hidden rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
               pathname === "/admin"
-                ? "bg-linear-to-r from-bright/50 to-[#4fc3f7]/20 shadow-lg"
-                : "text-white/70 hover:bg-white/10"
+                ? "bg-linear-to-r from-[#0060d0]/70 to-[#4fc3f7]/20 text-white shadow-[0_8px_25px_rgba(0,96,208,.25)]"
+                : "text-white/70 hover:bg-white/[0.07] hover:text-white"
             }`}
           >
-            <LayoutDashboard size={18} />
-            Dashboard
+            {pathname === "/admin" && (
+              <motion.span layoutId="dashboard-active" className="absolute left-0 h-7 w-1 rounded-r-full bg-[#4fc3f7]" />
+            )}
+            <LayoutDashboard size={18} className={pathname === "/admin" ? "text-[#4fc3f7]" : ""} />
+            <span>Dashboard</span>
+            {pathname === "/admin" && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#4fc3f7]" />}
           </Link>
         </div>
 
         {/* Search */}
-        <div className="p-4">
-          <div className="flex items-center gap-3 rounded-xl border border-[rgba(79,195,247,.2)] bg-white/5 px-3 py-3 transition focus-within:border-[#4fc3f7]">
-            <Search size={16} className="text-[#90caf9]" />
+        <div className="px-4 pb-4">
+          <div className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 transition-all duration-200 focus-within:border-[#4fc3f7]/50 focus-within:bg-white/8 focus-within:shadow-[0_0_25px_rgba(79,195,247,.08)]">
+            <Search size={16} className="shrink-0 text-white/40 transition-colors group-focus-within:text-[#4fc3f7]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search sections..."
-              className="w-full bg-transparent text-sm outline-none placeholder:text-white/30"
+              placeholder="Search your site..."
+              className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40"
             />
+            {query && (
+              <button onClick={() => setQuery("")} className="text-xs text-white/40 hover:text-white">×</button>
+            )}
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-4 pb-5">
-          {filteredCategories.map((category) => {
-            const Icon = category.icon;
-            const open = !collapsed[category.name];
+        {/* Navigation Map */}
+        <nav className="flex-1 overflow-y-auto px-3 pb-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+          {filteredCategories.map((category) => (
+            <SidebarCategory
+              key={category.id}
+              category={category}
+              query={query}
+              isOpen={query.trim().length > 0 ? true : !collapsed[category.id]}
+              onToggle={() => toggleCategory(category.id)}
+              pathname={pathname}
+            />
+          ))}
 
-            return (
-              <div key={category.name} className="mb-3">
-                <button
-                  onClick={() => toggleCategory(category.name)}
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[2px] text-white/40 hover:text-white"
-                >
-                  <span className="flex items-center gap-2">
-                    <Icon size={14} />
-                    {category.name}
-                  </span>
-                  <ChevronDown
-                    size={15}
-                    className={`transition-transform duration-500 ${open ? "" : "-rotate-90"}`}
-                  />
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {open && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="space-y-1 overflow-hidden"
-                    >
-                      {category.sections.map((section) => {
-                        const href = `/admin/sections/${section.slug}`;
-                        const active = pathname === href;
-
-                        return (
-                          <Link
-                            key={section.slug}
-                            href={href}
-                            className={`relative flex items-center rounded-xl px-4 py-2.5 text-sm transition-all ${
-                              active
-                                ? "bg-bright/40 text-white shadow-lg"
-                                : "text-white/55 hover:bg-white/10 hover:text-white"
-                            }`}
-                          >
-                            {active && (
-                              <motion.span
-                                layoutId="active"
-                                className="absolute left-0 h-8 w-1 rounded-full bg-[#4fc3f7]"
-                              />
-                            )}
-                            {section.label}
-                          </Link>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+          {/* No Search Results */}
+          {filteredCategories.length === 0 && (
+            <div className="px-5 py-10 text-center">
+              <Search size={24} className="mx-auto mb-3 text-white/30" />
+              <p className="text-sm font-semibold text-white/70">No sections found</p>
+              <p className="mt-1 text-[11px] text-white/40">Try a different search term</p>
+            </div>
+          )}
         </nav>
 
-        {/* Footer/Account Settings */}
-        <div className="border-t border-white/10 p-4">
+        {/* Account Footer */}
+        <div className="border-t border-white/10 p-3">
           <Link
             href="/admin/users"
-            className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-3 transition hover:bg-white/10"
+            className="group flex items-center gap-3 rounded-xl border border-white/6 bg-white/4 px-3 py-3 transition-all duration-200 hover:border-white/10 hover:bg-white/8"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-bright to-[#4fc3f7] font-bold">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-[#0060d0] to-[#4fc3f7] text-sm font-black shadow-lg">
               A
             </div>
-            <div>
-              <p className="text-sm font-bold">Admin</p>
-              <p className="text-xs text-white/40">Manage account</p>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs font-bold text-white">Admin</p>
+              <p className="mt-0.5 truncate text-[10px] text-white/50">Manage account</p>
             </div>
-            <Settings size={16} className="ml-auto text-white/40" />
+            <Settings size={16} className="text-white/40 transition-transform duration-300 group-hover:rotate-45 group-hover:text-white/80" />
           </Link>
         </div>
       </div>
     </aside>
+  );
+}
+
+/* =========================================================
+   SUB-COMPONENTS
+========================================================= */
+function SidebarCategory({ category, query, isOpen, onToggle, pathname }) {
+  const Icon = category.icon;
+
+  return (
+    <div className="mb-3">
+      <button
+        onClick={onToggle}
+        className="group flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left transition-all hover:bg-white/4"
+      >
+        <span className="text-[10px] font-black tracking-[1px] text-white/40 group-hover:text-white/60">
+          {category.number}
+        </span>
+        
+        <div className={`flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br ${category.color} opacity-70 shadow-lg`}>
+          <Icon size={12} strokeWidth={2.5} />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="text-[11px] font-black uppercase tracking-[1.5px] text-white/80 group-hover:text-white">
+            {category.name}
+          </div>
+          {!query && <div className="mt-0.5 truncate text-[10px] text-white/40">{category.description}</div>}
+        </div>
+
+        <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/50">
+          {category.sections.length}
+        </span>
+        
+        <ChevronDown size={14} className={`text-white/50 transition-transform duration-300 ${isOpen ? "" : "-rotate-90"}`} />
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="ml-7.25 overflow-hidden"
+          >
+            <div className="space-y-1 pt-1">
+              {category.sections.map((section) => {
+                const href = `/admin/sections/${section.slug}`;
+                const isActive = pathname === href;
+                const SectionIcon = section.icon;
+
+                return (
+                  <Link
+                    key={section.slug}
+                    href={href}
+                    className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 ${
+                      isActive ? "bg-white/10 text-white shadow-[0_5px_20px_rgba(0,0,0,.12)]" : "text-white/60 hover:bg-white/6 hover:text-white"
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="active-section"
+                        className="absolute -left-7.25 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-[#4fc3f7] shadow-[0_0_12px_rgba(79,195,247,.7)]"
+                      />
+                    )}
+
+                    <SectionIcon
+                      size={15}
+                      strokeWidth={isActive ? 2.3 : 1.8}
+                      className={`shrink-0 transition-colors ${isActive ? "text-[#4fc3f7]" : "text-white/40 group-hover:text-white/70"}`}
+                    />
+
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[13px] font-semibold">{section.label}</div>
+                      <div className={`mt-0.5 truncate text-[10px] ${isActive ? "text-white/60" : "text-white/40 group-hover:text-white/60"}`}>
+                        {section.description}
+                      </div>
+                    </div>
+
+                    <ArrowUpRight size={13} className="shrink-0 opacity-0 -translate-x-1 text-[#4fc3f7] transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

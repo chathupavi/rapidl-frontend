@@ -19,6 +19,12 @@ function HighlightText({ text, highlight }) {
   );
 }
 
+const tagIcons = {
+  location: "📍",
+  rating: "⭐",
+  time: "🕐",
+};
+
 export default function Hero({ data = {} }) {
     const {
     logo = "/images/logo.jpeg",
@@ -98,54 +104,84 @@ export default function Hero({ data = {} }) {
        </h1>
 
         <p className="mx-auto mb-5 max-w-170 text-[clamp(.95rem,2vw,1.2rem)] font-normal leading-[1.7] tracking-[.5px] text-[rgba(200,225,255,.8)]">
-          Trusted by families, hotels, restaurants and businesses for
-          professional laundry, dry cleaning, bridal dress care, shoe
-          cleaning and commercial linen solutions.
+          {subheading}
         </p>
 
         <div className="mb-7 flex flex-wrap justify-center gap-3">
-          <span className="rounded-full border border-[rgba(0,96,208,.35)] bg-[rgba(0,64,160,.25)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[rgba(200,225,255,.9)]">
-            📍 Kurunegala
-          </span>
-          <span className="rounded-full border border-[rgba(0,96,208,.35)] bg-[rgba(0,64,160,.25)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[rgba(200,225,255,.9)]">
-            📍 Kandy
-          </span>
-          <span className="rounded-full border border-[rgba(0,144,255,.5)] bg-[rgba(0,96,208,.3)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[#90caf9]">
-            ⭐ 5.0 Google Rating
-          </span>
-          <span className="rounded-full border border-[rgba(0,96,208,.35)] bg-[rgba(0,64,160,.25)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[rgba(200,225,255,.9)]">
-            🕐 7:30 AM – 6:00 PM Daily
-          </span>
+          {data.infoTags?.map((tag, index) => (
+            <span
+              key={index}
+              className="rounded-full border border-[rgba(0,96,208,.35)] bg-[rgba(0,64,160,.25)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[rgba(200,225,255,.9)]"
+            >
+              {tagIcons[tag.icon]} {tag.text}
+            </span>
+          ))}
         </div>
 
         {/* Corrected anchor tags here */}
         <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="#booking"
-            className="inline-flex items-center gap-2 rounded-[5px] bg-linear-to-br from-bright to-light px-8 py-[.9rem] text-[.97rem] font-bold uppercase tracking-[.3px] text-white shadow-[0_4px_20px_rgba(0,96,208,.45)] transition-all duration-300 hover:-translate-y-0.75 hover:shadow-[0_8px_32px_rgba(0,96,208,.6)]"
-          >
-            📅 Book Pickup
-          </a>
-          <a
-            href="https://wa.me/94703171717"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-[5px] bg-[#25d366] px-8 py-[.9rem] text-[.97rem] font-bold uppercase tracking-[.3px] text-white shadow-[0_4px_18px_rgba(37,211,102,.4)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1ebe5c]"
-          >
-            💬 WhatsApp Now
-          </a>
-          <a
-            href="#commercial"
-            className="inline-flex items-center gap-2 rounded-[5px] border-2 border-white/30 px-8 py-[.9rem] text-[.97rem] font-bold uppercase tracking-[.3px] text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/8"
-          >
-            🏢 Commercial Proposal
-          </a>
-          <a
-            href="#services"
-            className="inline-flex items-center gap-2 rounded-[5px] border-2 border-white/30 px-8 py-[.9rem] text-[.97rem] font-bold uppercase tracking-[.3px] text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/8"
-          >
-            🔍 View Services
-          </a>
+          {buttons?.map((button, index) => (
+            <a
+              key={index}
+              href={button.href}
+              target={button.style === "whatsapp" ? "_blank" : undefined}
+              rel={button.style === "whatsapp" ? "noreferrer" : undefined}
+              className={`
+                inline-flex
+                items-center
+                gap-2
+                rounded-[5px]
+                px-8
+                py-[.9rem]
+                text-[.97rem]
+                font-bold
+                uppercase
+                tracking-[.3px]
+                transition-all
+                duration-300
+                hover:-translate-y-0.5
+        
+                ${
+                  button.style === "primary"
+                    ? `
+                      bg-linear-to-br
+                      from-bright
+                      to-light
+                      text-white
+                      shadow-[0_4px_20px_rgba(0,96,208,.45)]
+                      hover:shadow-[0_8px_32px_rgba(0,96,208,.6)]
+                    `
+                    : ""
+                }
+        
+                ${
+                  button.style === "whatsapp"
+                    ? `
+                      bg-[#25d366]
+                      text-white
+                      shadow-[0_4px_18px_rgba(37,211,102,.4)]
+                      hover:bg-[#1ebe5c]
+                    `
+                    : ""
+                }
+        
+                ${
+                  button.style === "outline"
+                    ? `
+                      border-2
+                      border-white/30
+                      text-white
+                      hover:border-white
+                      hover:bg-white/8
+                    `
+                    : ""
+                }
+              `}
+            >
+              {button.icon && <span>{button.icon}</span>}
+              {button.label}
+            </a>
+          ))}
         </div>
       </div>
 

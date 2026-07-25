@@ -3,6 +3,7 @@ import TextAreaField from "./TextAreaField";
 import ImageField from "./ImageField";
 import SelectField from "./SelectField";
 import NumberField from "./NumberField";
+import EmojiField from "./EmojiField";
 
 // Shared switch used by both SectionForm (top-level fields)
 // and RepeaterField (nested fields inside each repeater item).
@@ -53,6 +54,14 @@ export default function renderField(field, value, onChange) {
           value={value}
           onChange={onChange}
         />
+      );
+      case "emoji":
+      return (
+       <EmojiField
+         label={field.label}
+         value={value}
+         onChange={onChange}
+       />
       );
   }
 }

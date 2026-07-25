@@ -16,7 +16,23 @@ export const sectionSchemas = {
         type: "repeater",
         label: "Info Badges (location, rating, hours)",
         itemLabel: "Badge",
-        fields: [{ name: "text", type: "text", label: "Text" }],
+        fields: [
+          {
+            name: "icon",
+            type: "select",
+            label: "Icon Type",
+            options: [
+              "location",
+              "rating",
+              "time"
+            ],
+          },
+          {
+            name: "text",
+            type: "text",
+            label: "Text"
+          }
+        ],
       },
       {
         name: "buttons",
@@ -24,13 +40,30 @@ export const sectionSchemas = {
         label: "CTA Buttons",
         itemLabel: "Button",
         fields: [
-          { name: "label", type: "text", label: "Button Label" },
-          { name: "href", type: "text", label: "Link (# or URL)" },
+          {
+            name: "icon",
+            type: "emoji",
+            label: "Icon"
+          },
+          {
+            name: "label",
+            type: "text",
+            label: "Button Label"
+          },
+          {
+            name: "href",
+            type: "text",
+            label: "Link (# or URL)"
+          },
           {
             name: "style",
             type: "select",
             label: "Style",
-            options: ["primary", "whatsapp", "outline"],
+            options: [
+              "primary",
+              "whatsapp",
+              "outline"
+            ],
           },
         ],
       },
