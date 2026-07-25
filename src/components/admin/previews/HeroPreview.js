@@ -3,11 +3,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const tagIcons = {
-  location: "📍",
-  rating: "⭐",
-  time: "🕐",
-};
 
 function HighlightText({ text = "", highlight = "" }) {
   if (!text) return null;
@@ -133,7 +128,7 @@ export default function HeroPreview({ data = {} }) {
                 key={index}
                 className="rounded-full border border-blue-300/20 bg-blue-950/30 px-3 py-1.5 text-xs font-semibold text-blue-100/90"
               >
-                {tagIcons[tag.icon] || "•"} {tag.text}
+                {tag.icon || "•"} {tag.text}
               </span>
             ))}
           </div>

@@ -2,100 +2,162 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const stats = [
-  { target: 10000, suffix: "+", label: "Garments Processed" },
-  { target: 500, suffix: "+", label: "Satisfied Customers" },
-  { target: 50, suffix: "+", label: "Commercial Clients" },
-  { target: 99, suffix: "%", label: "On-Time Delivery" },
-];
-
-function Counter({ target, suffix, start }) {
-  const [value, setValue] = useState(0);
+/* =========================================================
+   COUNTER COMPONENT
+========================================================= */
+function Counter({
+  target,
+  prefix = "",
+  suffix = "",
+  start = false,
+  animated = true,
+}) {
+  const [value, setValue] = useState(
+    animated ? 0 : target
+  );
 
   useEffect(() => {
+    // No animation required
+    if (!animated) return;
+
+    // Wait until component enters viewport
     if (!start) return;
 
     const duration = 1800;
-    const step = (target / duration) * 16;
-    let current = 0;
+    const startTime = performance.now();
 
-    const timer = setInterval(() => {
-      current = Math.min(current + step, target);
-      setValue(Math.round(current));
-      if (current >= target) clearInterval(timer);
-    }, 16);
+    let animationFrame;
 
-    return () => clearInterval(timer);
-  }, [start, target]);
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
 
-  const display = target >= 1000 ? value.toLocaleString() : value;
+      // Ease-out animation
+      const easedProgress =
+        1 - Math.pow(1 - progress, 3);
+
+      const currentValue = Math.round(
+        target * easedProgress
+      );
+
+      setValue(currentValue);
+
+      if (progress < 1) {
+        animationFrame =
+          requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame =
+      requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [start, target, animated]);
+
+  // If animation is disabled,
+  // directly use the target value.
+  const displayValue = animated
+    ? value
+    : target;
+
+  const display =
+    Number(target) >= 1000
+      ? Number(displayValue).toLocaleString()
+      : displayValue;
 
   return (
     <span className="inline-block">
+      {prefix}
       {display}
       {suffix}
     </span>
   );
 }
-
-export default function StatsStrip() {
+/* =========================================================
+   STATS STRIP COMPONENT
+========================================================= */
+export default function StatsStrip({ data = {} }) {
   const [start, setStart] = useState(false);
   const stripRef = useRef(null);
 
+  // Get stats dynamically from database/API
+  const { stats = [] } = data;
+
+  /* =========================================================
+     START COUNTER WHEN COMPONENT ENTERS VIEWPORT
+  ========================================================= */
   useEffect(() => {
     const el = stripRef.current;
+
     if (!el) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setStart(true);
-            observer.disconnect();
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStart(true);
+
+          // Stop observing after animation starts
+          observer.disconnect();
+        }
       },
-      { threshold: 0.3 }
+      {
+        threshold: 0.3,
+      }
     );
 
     observer.observe(el);
+
     return () => observer.disconnect();
   }, []);
 
+  /* =========================================================
+     DON'T RENDER IF THERE ARE NO STATS
+  ========================================================= */
+  if (!stats || stats.length === 0) {
+    return null;
+  }
+
+  /* =========================================================
+     RENDER DYNAMIC STATS
+  ========================================================= */
   return (
     <div
       ref={stripRef}
       className="flex flex-wrap justify-center gap-14 border-b border-[rgba(0,96,208,.2)] bg-navy px-[5%] py-[1.6rem]"
     >
-      {stats.map((stat) => (
-        <div key={stat.label} className="text-center text-white">
-          <div className="font-barlowCond text-[2.4rem] font-extrabold leading-none tracking-[1px] text-white">
-            <Counter target={stat.target} suffix={stat.suffix} start={start} />
-          </div>
-          <div className="mt-[.2rem] text-[.72rem] uppercase tracking-[1.5px] text-white/40">
-            {stat.label}
-          </div>
-        </div>
-      ))}
+      {stats.map((stat, index) => {
+        // Make sure animated is treated as a boolean
+        const isAnimated = stat.animated === true;
 
-      {/* Static, non-counter stats */}
-      <div className="text-center text-white">
-        <div className="font-barlowCond text-[2.4rem] font-extrabold leading-none tracking-[1px] text-white">
-          5.0★
-        </div>
-        <div className="mt-[.2rem] text-[.72rem] uppercase tracking-[1.5px] text-white/40">
-          Google Rating
-        </div>
-      </div>
+        return (
+          <div
+            key={`${stat.label}-${index}`}
+            className="text-center text-white"
+          >
+            {/* ================================
+                STAT VALUE
+            ================================= */}
+            <div className="font-barlowCond text-[2.4rem] font-extrabold leading-none tracking-[1px] text-white">
+              <Counter
+                target={Number(stat.value) || 0}
+                prefix={stat.prefix || ""}
+                suffix={stat.suffix || ""}
+                start={start}
+                animated={isAnimated}
+              />
+            </div>
 
-      <div className="text-center text-white">
-        <div className="font-barlowCond text-[2.4rem] font-extrabold leading-none tracking-[1px] text-white">
-          2
-        </div>
-        <div className="mt-[.2rem] text-[.72rem] uppercase tracking-[1.5px] text-white/40">
-          Branches
-        </div>
-      </div>
+            {/* ================================
+                STAT LABEL
+            ================================= */}
+            <div className="mt-[.2rem] text-[.72rem] uppercase tracking-[1.5px] text-white/40">
+              {stat.label}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

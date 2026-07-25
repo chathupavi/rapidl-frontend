@@ -55,13 +55,8 @@ export const sectionSchemas = {
             fields: [
               {
                 name: "icon",
-                type: "select",
+                type: "emoji",
                 label: "Icon Type",
-                options: [
-                  "location",
-                  "rating",
-                  "time",
-                ],
               },
               {
                 name: "text",
@@ -125,48 +120,62 @@ export const sectionSchemas = {
   // ==========================================================
   // STATS STRIP
   // ==========================================================
-
-  "stats-strip": {
-    label: "Stats Strip",
-    description: "Manage the animated statistics displayed on your website.",
-
-    groups: [
-      {
-        id: "stats-content",
-        title: "Statistics",
-        description: "Add or update the key numbers shown to your visitors.",
-        fields: [
-          {
-            name: "stats",
-            type: "repeater",
-            label: "Animated Stats",
-            itemLabel: "Stat",
-            addLabel: "Add Statistic",
-            fields: [
-              {
-                name: "target",
-                type: "number",
-                label: "Target Number",
-                placeholder: "1000",
-              },
-              {
-                name: "suffix",
-                type: "text",
-                label: "Suffix",
-                placeholder: "+",
-              },
-              {
-                name: "label",
-                type: "text",
-                label: "Label",
-                placeholder: "Happy Customers",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+"stats-strip": {
+  label: "Stats Strip",
+  description: "Manage the key statistics displayed on your website.",
+  groups: [
+    {
+      id: "stats-content",
+      title: "Statistics",
+      description: "Add and manage the key numbers shown to your visitors.",
+      fields: [
+        {
+          name: "stats",
+          type: "repeater",
+          label: "Statistics",
+          itemLabel: "Statistic",
+          addLabel: "Add Statistic",
+          fields: [
+            {
+              name: "prefix",
+              type: "text",
+              label: "Prefix",
+              placeholder: "$",
+              description: "Optional symbol before the number (e.g., $, ~)",
+            },
+            {
+              name: "value",
+              type: "number",
+              label: "Value",
+              placeholder: "10000",
+              required: true,
+            },
+            {
+              name: "suffix",
+              type: "text",
+              label: "Suffix",
+              placeholder: "+",
+              description: "Optional symbol after the number (e.g., +, %)",
+            },
+            {
+              name: "label",
+              type: "text",
+              label: "Label",
+              placeholder: "Garments Processed",
+              required: true,
+            },
+            {
+              name: "animated",
+              type: "boolean",
+              label: "Animate Number?",
+              defaultValue: true,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+},
 
 
   // ==========================================================
@@ -195,7 +204,7 @@ export const sectionSchemas = {
                 type: "text",
                 label: "Text",
                 placeholder: "Professional Care ✨",
-              },
+              },  
             ],
           },
         ],

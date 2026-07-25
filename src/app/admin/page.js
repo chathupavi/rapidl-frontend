@@ -99,7 +99,7 @@ const activity = [
    METADATA
 ========================================================= */
 export const metadata = {
-  title: "Website Control Center",
+  title: "Rapid Laundromat - Control Center",
 };
 
 /* =========================================================
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
           <div className="max-w-2xl">
             <div className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[3px] text-[#90caf9]">
               <span className="h-2 w-2 rounded-full bg-brandGreen shadow-[0_0_10px_rgba(34,197,94,.8)]" />
-              Website Control Center
+              Rapid Laundromat - Control Center
             </div>
             <h1 className="font-barlowCond text-[2.1rem] font-extrabold uppercase leading-[.95] tracking-[1px] text-white sm:text-[2.5rem]">
               Your digital storefront,

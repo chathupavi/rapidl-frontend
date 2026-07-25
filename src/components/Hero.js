@@ -113,7 +113,7 @@ export default function Hero({ data = {} }) {
               key={index}
               className="rounded-full border border-[rgba(0,96,208,.35)] bg-[rgba(0,64,160,.25)] px-4 py-[.36rem] text-[.82rem] font-semibold text-[rgba(200,225,255,.9)]"
             >
-              {tagIcons[tag.icon]} {tag.text}
+              {tag.icon || "•"} {tag.text}
             </span>
           ))}
         </div>

@@ -26,7 +26,7 @@ export default function LivePreview({ schema, data }) {
 
       default:
         return (
-          <div className="flex min-h-[500px] items-center justify-center p-10 text-center">
+          <div className="flex min-h-125 items-center justify-center p-10 text-center">
             <div>
               <p className="text-lg font-black text-gray-700">
                 Preview Not Available

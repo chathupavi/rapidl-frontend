@@ -4,7 +4,7 @@ import ImageField from "./ImageField";
 import SelectField from "./SelectField";
 import NumberField from "./NumberField";
 import EmojiField from "./EmojiField";
-
+import BooleanField from "./BooleanField";
 
 export default function renderField(field, value, onChange) {
   if (!field) {
@@ -19,54 +19,35 @@ export default function renderField(field, value, onChange) {
 
   switch (field.type) {
     case "textarea":
-      return (
-        <TextAreaField
-          key={field.name}
-          {...commonProps}
-        />
-      );
+      return <TextAreaField {...commonProps} />;
 
     case "image":
-      return (
-        <ImageField
-          key={field.name}
-          {...commonProps}
-        />
-      );
+      return <ImageField {...commonProps} />;
 
     case "select":
-      return (
-        <SelectField
-          key={field.name}
-          {...commonProps}
-        />
-      );
+      return <SelectField {...commonProps} />;
 
     case "number":
-      return (
-        <NumberField
-          key={field.name}
-          {...commonProps}
-        />
-      );
+      return <NumberField {...commonProps} />;
 
     case "emoji":
       return (
         <EmojiField
-          key={field.name}
           label={field.label}
           value={value ?? ""}
           onChange={onChange}
         />
       );
-
-    case "text":
-    default:
+    case "boolean":
       return (
-        <TextField
-          key={field.name}
-          {...commonProps}
+        <BooleanField
+          field={field}
+          value={value}
+          onChange={onChange}
         />
       );
+    case "text":
+    default:
+      return <TextField {...commonProps} />;
   }
 }

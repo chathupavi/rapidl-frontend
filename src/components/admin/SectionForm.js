@@ -79,7 +79,7 @@ export default function SectionForm({ schema, initialData }) {
       <div
         className={`grid gap-6 transition-all duration-500 ${
           previewOpen
-            ? "grid-cols-1 xl:grid-cols-[minmax(0,1fr)_520px]"
+            ? "grid-cols-1 xl:grid-cols-2"
             : "grid-cols-1"
         }`}
       >
