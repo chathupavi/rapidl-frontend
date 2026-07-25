@@ -1,22 +1,29 @@
+"use client";
+
 import { Fragment } from "react";
 
-const values = [
-  "🌿 Eco-Friendly",
-  "✨ Lean & Clean",
-  "⚙️ Process Oriented",
-  "🎯 Specialist Experts",
-  "🤝 Human Focused",
-];
+export default function ValuesBanner({ data = {} }) {
+  const {
+    items = [],
+  } = data;
 
-export default function ValuesBanner() {
+  // Don't render if there are no items
+  if (!items || items.length === 0) {
+    return null;
+  }
+
   return (
     <div className="flex flex-wrap items-center justify-center gap-10 bg-linear-to-r from-accent to-bright px-[5%] py-[.9rem]">
-      {values.map((item, i) => (
-        <Fragment key={item}>
+      {items.map((item, index) => (
+        <Fragment
+          key={item._id || `${item.text}-${index}`}
+        >
           <span className="text-[.8rem] font-bold uppercase tracking-[.8px] text-white">
-            {item}
+            {item.icon && `${item.icon} `}
+            {item.text}
           </span>
-          {i < values.length - 1 && (
+
+          {index < items.length - 1 && (
             <span className="h-1 w-1 rounded-full bg-white/40" />
           )}
         </Fragment>

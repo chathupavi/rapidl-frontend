@@ -9,6 +9,10 @@ import {
 } from "lucide-react";
 
 import HeroPreview from "./previews/HeroPreview";
+import StatsStripPreview from "./previews/StatsStripPreview";
+import ValuesBannerPreview from "./previews/ValuesBannerPreview";
+import TrustPreview from "./previews/TrustPreview";
+import ServicesPreview from "./previews/ServicesPreview";
 
 export default function LivePreview({ schema, data }) {
   const [device, setDevice] = useState("desktop");
@@ -23,7 +27,14 @@ export default function LivePreview({ schema, data }) {
     switch (schema.key) {
       case "hero":
         return <HeroPreview data={data} />;
-
+      case "stats-strip":
+        return <StatsStripPreview data={data} />;
+      case "values-banner":
+        return <ValuesBannerPreview data={data} />;
+      case "trust":
+        return <TrustPreview data={data} />;
+      case "services":
+        return <ServicesPreview data={data} />;
       default:
         return (
           <div className="flex min-h-125 items-center justify-center p-10 text-center">

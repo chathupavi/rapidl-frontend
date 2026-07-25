@@ -200,6 +200,12 @@ export const sectionSchemas = {
             addLabel: "Add Banner Item",
             fields: [
               {
+                name: "icon",
+                type: "emoji",
+                label: "Icon",
+                placeholder: "",
+              },
+              {
                 name: "text",
                 type: "text",
                 label: "Text",
@@ -217,73 +223,107 @@ export const sectionSchemas = {
   // TRUST
   // ==========================================================
 
-  trust: {
-    label: "Trust",
-    description: "Manage the trust and credibility section.",
+trust: {
+  label: "Trust",
+  description: "Manage the trust and credibility section.",
 
-    groups: [
-      {
-        id: "trust-content",
-        title: "Section Content",
-        description: "Configure the main title and supporting message.",
-        fields: [
-          {
-            name: "label",
-            type: "text",
-            label: "Section Label",
-            placeholder: "WHY CHOOSE US",
-          },
-          {
-            name: "heading",
-            type: "textarea",
-            label: "Heading",
-            placeholder: "Trusted by customers who care about quality",
-          },
-          {
-            name: "description",
-            type: "textarea",
-            label: "Description",
-            placeholder: "Professional care delivered with attention to detail.",
-          },
-        ],
-      },
+  groups: [
+    {
+      id: "trust-content",
+      title: "Section Content",
+      description: "Configure the trust section label, heading, and supporting description.",
+      fields: [
+        {
+          name: "label",
+          type: "text",
+          label: "Section Label",
+          placeholder: "Why Rapid Laundromat",
+          required: true,
+        },
+        {
+          name: "heading",
+          type: "textarea",
+          label: "Heading",
+          placeholder: "Premium Standards. Proven Results.",
+          required: true,
+        },
+        {
+          name: "description",
+          type: "textarea",
+          label: "Description",
+          placeholder:
+            "Sri Lanka's most trusted name in professional garment care — backed by real numbers, verified reviews and 28 years of expertise.",
+        },
+      ],
+    },
 
-      {
-        id: "trust-cards",
-        title: "Trust Cards",
-        description: "Manage the statistics or trust indicators displayed in this section.",
-        fields: [
-          {
-            name: "items",
-            type: "repeater",
-            label: "Trust Cards",
-            itemLabel: "Card",
-            addLabel: "Add Trust Card",
-            fields: [
-              {
-                name: "icon",
-                type: "text",
-                label: "Icon",
-                placeholder: "⭐",
-              },
-              {
-                name: "value",
-                type: "text",
-                label: "Value",
-                placeholder: "10+",
-              },
-              {
-                name: "label",
-                type: "text",
-                label: "Label",
-                placeholder: "Years Experience",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+    {
+      id: "trust-cards",
+      title: "Trust Cards",
+      description:
+        "Manage the trust indicators displayed as cards in this section.",
+
+      fields: [
+        {
+          name: "items",
+          type: "repeater",
+          label: "Trust Cards",
+          itemLabel: "Trust Card",
+          addLabel: "Add Trust Card",
+
+          fields: [
+            {
+              name: "icon",
+              type: "emoji",
+              label: "Icon",
+              placeholder: "⭐",
+            },
+
+            {
+              name: "caption",
+              type: "text",
+              label: "Caption",
+              placeholder: "Professional Equipment",
+              description:
+                "Optional small text displayed above the main value.",
+            },
+
+            {
+              name: "value",
+              type: "text",
+              label: "Value",
+              placeholder: "5.0",
+              required: true,
+              description:
+                "Main value displayed prominently in the card. Supports text, numbers, decimals, and symbols.",
+            },
+
+            {
+              name: "valueSize",
+              type: "select",
+              label: "Value Size",
+              defaultValue: "large",
+              options: [
+                "large",
+                "medium",
+              ],
+              description:
+                "Use medium for longer values such as 'Industrial'.",
+            },
+
+            {
+              name: "label",
+              type: "text",
+              label: "Label",
+              placeholder: "Google Verified Rating",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+},
 
 
   // ==========================================================
@@ -335,7 +375,7 @@ export const sectionSchemas = {
             fields: [
               {
                 name: "icon",
-                type: "text",
+                type: "emoji",
                 label: "Icon",
                 placeholder: "👟",
               },

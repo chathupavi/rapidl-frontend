@@ -27,15 +27,18 @@ import { getSection } from "@/lib/getSection";
 export default async  function Home() {
   const hero = await getSection("hero"); 
   const statsStrip = await getSection("stats-strip"); 
+  const valuesBanner = await getSection("values-banner"); 
+  const trust = await getSection("trust"); 
+  const services = await getSection("services"); 
   return (
     <>
       <Navbar />
       <main>
         <Hero data={hero} />
         <StatsStrip data={statsStrip} />
-        <ValuesBanner />
-        <Trust />
-        <Services />
+        <ValuesBanner data={valuesBanner}/>
+        <Trust data={trust} />
+        <Services data={services} />
         <Signature />
         <Why />
         <Commercial />
