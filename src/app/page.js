@@ -1,63 +1,230 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import StatsStrip from "@/components/StatsStrip";
-import ValuesBanner from "@/components/ValuesBanner";
-import Trust from "@/components/Trust";
-import Services from "@/components/Services";
-import Signature from "@/components/Signature";
-import Why from "@/components/Why";
-import Commercial from "@/components/Commercial";
-import Booking from "@/components/Booking";
-import Tech from "@/components/Tech";
-import Founder from "@/components/Founder";
-import Gallery from "@/components/Gallery";
-import Values from "@/components/Values";
-import Reviews from "@/components/Reviews";
-import Locations from "@/components/Locations";
-import Vision from "@/components/Vision";
-import SeoPages from "@/components/SeoPages";
-import Delivery from "@/components/Delivery";
-import Faq from "@/components/Faq";
-import Social from "@/components/Social";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import { getSection } from "@/lib/getSection";
+import Navbar from "@/components/site/Navbar";
+import Hero from "@/components/site/Hero";
+import TrustStrip from "@/components/site/TrustStrip";
+import Services from "@/components/site/Services";
+import SignatureCare from "@/components/site/SignatureCare";
 
-export default async  function Home() {
-  const hero = await getSection("hero"); 
-  const statsStrip = await getSection("stats-strip"); 
-  const valuesBanner = await getSection("values-banner"); 
-  const trust = await getSection("trust"); 
-  const services = await getSection("services"); 
+import {
+  getServiceGroups,
+} from "@/lib/getServices";
+
+import WhyRapid from "@/components/site/WhyRapid";
+import Awards from "@/components/site/Awards";
+import Process from "@/components/site/Process";
+import Locations from "@/components/site/Locations";
+import People from "@/components/site/People";
+import Reviews from "@/components/site/Reviews";
+import Commercial from "@/components/site/Commercial";
+import Gallery from "@/components/site/Gallery";
+import BookingCTA from "@/components/site/BookingCTA";
+import FAQ from "@/components/site/FAQ";
+import Contact from "@/components/site/Contact";
+import Footer from "@/components/site/Footer";
+
+import CampaignPopup from "@/components/marketing/CampaignPopup";
+import CampaignHeroSlot from "@/components/campaigns/CampaignHeroSlot";
+import CampaignEngine from "@/components/campaigns/CampaignEngine";
+
+import {
+  getPublishedGallery,
+} from "@/lib/getGallery";
+
+import {
+  getPublishedFaqs,
+} from "@/lib/getFaqs";
+
+import {
+  getPublishedTrustStats,
+} from "@/lib/getTrustStats";
+
+import {
+  getSection,
+} from "@/lib/getSection";
+
+import {
+  getPublicAwards,
+} from "@/lib/getAwards";
+
+
+/* =========================================================
+   HOMEPAGE METADATA
+========================================================= */
+
+export const metadata = {
+  title:
+    "Rapid Laundromat | Professional Laundry & Garment Care",
+
+  description:
+    "Rapid Laundromat provides professional laundry, dry cleaning, washing, ironing and garment care services in Sri Lanka.",
+
+  alternates: {
+    canonical:
+      "https://rapidlaundromat.lk/",
+  },
+
+  openGraph: {
+    title:
+      "Rapid Laundromat | Professional Laundry & Garment Care",
+
+    description:
+      "Professional laundry, dry cleaning, washing, ironing and garment care services in Sri Lanka.",
+
+    url:
+      "https://rapidlaundromat.lk/",
+
+    siteName:
+      "Rapid Laundromat",
+
+    type:
+      "website",
+
+    locale:
+      "en_LK",
+  },
+
+  twitter: {
+    card:
+      "summary_large_image",
+
+    title:
+      "Rapid Laundromat | Professional Laundry & Garment Care",
+
+    description:
+      "Professional laundry, dry cleaning, washing, ironing and garment care services in Sri Lanka.",
+  },
+};
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+export default async function Home() {
+  const [
+    hero,
+    serviceGroups,
+    trustStats,
+    galleryItems,
+    faqItems,
+    awards,
+  ] = await Promise.all([
+    getSection(
+      "hero"
+    ),
+
+    getServiceGroups(),
+
+    getPublishedTrustStats(),
+
+    getPublishedGallery(),
+
+    getPublishedFaqs(),
+
+    getPublicAwards(),
+  ]);
+
+
+  const {
+    normalServices,
+    signatureServices,
+  } = serviceGroups;
+
+
   return (
     <>
       <Navbar />
+
+      <CampaignPopup />
+
+      <CampaignEngine />
+
+
       <main>
-        <Hero data={hero} />
-        <StatsStrip data={statsStrip} />
-        <ValuesBanner data={valuesBanner}/>
-        <Trust data={trust} />
-        <Services data={services} />
-        <Signature />
-        <Why />
-        <Commercial />
-        <Booking />
-        <Tech />
-        <Founder />
-        <Gallery />
-        <Values />
-        <Reviews />
+
+        <Hero
+          data={
+            hero
+          }
+        />
+
+
+        <CampaignHeroSlot />
+
+
+        <TrustStrip
+          items={
+            trustStats
+          }
+        />
+
+
+        <Services
+          data={{
+            services:
+              normalServices,
+          }}
+        />
+
+
+        <SignatureCare
+          data={{
+            services:
+              signatureServices,
+          }}
+        />
+
+
+        <WhyRapid />
+
+
+        <Awards
+          data={{
+            items:
+              awards,
+          }}
+        />
+
+
+        <Process />
+
+
         <Locations />
-        <Vision />
-        <SeoPages />
-        <Delivery />
-        <Faq />
-        <Social />
+
+
+        <People />
+
+
+        <Reviews />
+
+
+        <Commercial />
+
+
+        <Gallery
+          data={{
+            items:
+              galleryItems,
+          }}
+        />
+
+
+        <BookingCTA />
+
+
+        <FAQ
+          data={{
+            items:
+              faqItems,
+          }}
+        />
+
+
         <Contact />
+
+
+        <Footer />
+
       </main>
-      <Footer />
-      <WhatsAppFloat />
     </>
   );
 }

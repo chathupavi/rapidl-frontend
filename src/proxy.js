@@ -1,19 +1,51 @@
 import { NextResponse } from "next/server";
 
-export function proxy(request) {
-  console.log("🔥 Proxy:", request.nextUrl.pathname);
+export async function proxy(request) {
 
-  const token = request.cookies.get("token");
+    const pathname =
+        request.nextUrl.pathname;
 
-  console.log("🍪 Token:", token);
+    console.log("🔥 Proxy:", pathname);
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+    const session =
+        request.cookies.get("session");
 
-  return NextResponse.next();
+    console.log(
+        "🍪 Session:",
+        session ? "PRESENT" : "MISSING"
+    );
+
+
+    // ----------------------------------------------------------
+    // No session
+    // ----------------------------------------------------------
+
+    if (!session) {
+
+        return NextResponse.redirect(
+            new URL(
+                "/login",
+                request.url
+            )
+        );
+    }
+
+
+    // ----------------------------------------------------------
+    // Session exists
+    //
+    // The backend remains the actual authority.
+    // The API endpoints are protected by requireAdmin.
+    // ----------------------------------------------------------
+
+    return NextResponse.next();
 }
 
+
 export const config = {
-  matcher: ["/admin/:path*"],
+
+    matcher: [
+        "/admin/:path*",
+    ],
+
 };

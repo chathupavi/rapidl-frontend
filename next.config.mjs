@@ -6,7 +6,19 @@
 const nextConfig = {
   allowedDevOrigins: [
     "192.168.8.180",
+    "192.168.8.142",
     "192.168.8.130",
   ],
+    images: {
+    remotePatterns: [
+      {
+        protocol:
+          "https",
+
+        hostname:
+          "firebasestorage.googleapis.com",
+      },
+    ],
+  },
 };
 export default nextConfig;
