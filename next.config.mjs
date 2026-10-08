@@ -10,6 +10,7 @@ const nextConfig = {
     "192.168.8.130",
   ],
     images: {
+    qualities: [72, 75],
     remotePatterns: [
       {
         protocol:

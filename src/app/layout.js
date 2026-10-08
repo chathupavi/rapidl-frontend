@@ -1,475 +1,303 @@
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 
-import Script from "next/script";
-
-import {
-  Barlow,
-  Barlow_Condensed,
-} from "next/font/google";
-
+import { Barlow, Barlow_Condensed } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 /* =========================================================
-   SITE
+   SITE CONSTANTS & SECURE SERVER API URL
 ========================================================= */
 
-const SITE_URL =
-  "https://rapidlaundromat.lk";
+const SITE_URL = "https://rapidlaundromat.lk";
+const SITE_NAME = "Rapid Laundromat";
 
-const SITE_NAME =
-  "Rapid Laundromat";
-
+// Prioritizes private server API URL; falls back to public if not defined
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
 
 /* =========================================================
    FONTS
 ========================================================= */
 
-const barlow =
-  Barlow({
-    subsets: [
-      "latin",
-    ],
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-barlow",
+  display: "swap",
+});
 
-    weight: [
-      "300",
-      "400",
-      "500",
-      "600",
-      "700",
-    ],
-
-    variable:
-      "--font-barlow",
-
-    display:
-      "swap",
-  });
-
-
-const barlowCondensed =
-  Barlow_Condensed({
-    subsets: [
-      "latin",
-    ],
-
-    weight: [
-      "400",
-      "600",
-      "700",
-      "800",
-      "900",
-    ],
-
-    variable:
-      "--font-barlow-condensed",
-
-    display:
-      "swap",
-  });
-
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-barlow-condensed",
+  display: "swap",
+});
 
 /* =========================================================
-   METADATA
+   STATIC METADATA (SERP OPTIMIZED)
 ========================================================= */
 
 export const metadata = {
-  metadataBase:
-    new URL(
-      SITE_URL
-    ),
+  metadataBase: new URL(SITE_URL),
 
   title: {
-    default:
-      "Rapid Laundromat | Premium Laundry & Garment Care in Sri Lanka",
-
-    template:
-      "%s | Rapid Laundromat",
+    default: "Rapid Laundromat | Laundry & Garment Care Sri Lanka",
+    template: "%s | Rapid Laundromat",
   },
 
   description:
-    "Premium laundry, dry cleaning, ironing and garment care services in Sri Lanka. Visit Rapid Laundromat in Kurunegala and Kandy for professional personal and commercial laundry care.",
+    "Professional laundry, dry cleaning, and ironing services across Sri Lanka. Fast, affordable personal and commercial garment care.",
 
-  applicationName:
-    SITE_NAME,
+  applicationName: SITE_NAME,
 
   authors: [
     {
-      name:
-        SITE_NAME,
-
-      url:
-        SITE_URL,
+      name: SITE_NAME,
+      url: SITE_URL,
     },
   ],
 
-  creator:
-    SITE_NAME,
-
-  publisher:
-    SITE_NAME,
-
-
-  /* =======================================================
-     ROBOTS
-  ======================================================= */
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
 
   robots: {
-    index:
-      true,
-
-    follow:
-      true,
-
+    index: true,
+    follow: true,
     googleBot: {
-      index:
-        true,
-
-      follow:
-        true,
-
-      "max-image-preview":
-        "large",
-
-      "max-snippet":
-        -1,
-
-      "max-video-preview":
-        -1,
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
-
-
-  /* =======================================================
-     ICONS
-  ======================================================= */
 
   icons: {
     icon: [
-      {
-        url:
-          "/favicon.ico",
-
-        sizes:
-          "any",
-      },
-
-      {
-        url:
-          "/icon.png",
-
-        type:
-          "image/png",
-
-        sizes:
-          "48x48",
-      },
-
-      {
-        url:
-          "/icon-192.png",
-
-        type:
-          "image/png",
-
-        sizes:
-          "192x192",
-      },
-
-      {
-        url:
-          "/icon-512.png",
-
-        type:
-          "image/png",
-
-        sizes:
-          "512x512",
-      },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
-
-    shortcut: [
-      {
-        url:
-          "/favicon.ico",
-      },
-    ],
-
+    shortcut: ["/favicon.ico"],
     apple: [
       {
-        url:
-          "/apple-icon.png",
-
-        sizes:
-          "180x180",
-
-        type:
-          "image/png",
+        url: "/apple-icon.png",
+        sizes: "180x180",
+        type: "image/png",
       },
     ],
   },
 
-
-  /* =======================================================
-     CANONICAL
-  ======================================================= */
-
+  // Relative canonical prevents child pages from defaulting to the root URL
   alternates: {
-    canonical:
-      "/",
+    canonical: "./",
   },
-
-
-  /* =======================================================
-     OPEN GRAPH
-  ======================================================= */
 
   openGraph: {
-    title:
-      "Rapid Laundromat | Premium Laundry & Garment Care in Sri Lanka",
-
+    title: "Rapid Laundromat | Premium Laundry & Garment Care Sri Lanka",
     description:
-      "Premium laundry, dry cleaning and garment care services across Sri Lanka, with professional personal and commercial laundry solutions.",
-
-    url:
-      SITE_URL,
-
-    siteName:
-      SITE_NAME,
-
-    locale:
-      "en_LK",
-
-    type:
-      "website",
-
+      "Professional laundry, dry cleaning, and garment care services across Sri Lanka.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "en_LK",
+    type: "website",
     images: [
       {
-        url:
-          "/images/og-cover.jpg",
-
-        width:
-          1200,
-
-        height:
-          630,
-
-        alt:
-          "Rapid Laundromat - Premium Laundry and Garment Care",
+        url: "/images/og-cover.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Rapid Laundromat - Premium Laundry and Garment Care Sri Lanka",
       },
     ],
   },
 
-
-  /* =======================================================
-     TWITTER
-  ======================================================= */
-
   twitter: {
-    card:
-      "summary_large_image",
-
-    title:
-      "Rapid Laundromat | Premium Laundry & Garment Care in Sri Lanka",
-
+    card: "summary_large_image",
+    title: "Rapid Laundromat | Premium Laundry Care Sri Lanka",
     description:
-      "Premium laundry, dry cleaning and garment care services across Sri Lanka.",
+      "Professional laundry, dry cleaning, and commercial garment care across Sri Lanka.",
+    images: ["/images/og-cover.jpg"],
+  },
 
-    images: [
-      "/images/og-cover.jpg",
+  category: "Laundry Service",
+};
+
+/* =========================================================
+   SECURE SERVER-SIDE DATA FETCHING (FOR DYNAMIC SCHEMA)
+========================================================= */
+
+async function getBranchesForSchema() {
+  if (!API_URL) return [];
+
+  try {
+    const res = await fetch(`${API_URL}/api/people/branches`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+      next: { revalidate: 3600 }, // Cache on server for 1 hour
+    });
+
+    if (!res.ok) return [];
+
+    const result = await res.json();
+    return Array.isArray(result?.branches)
+      ? result.branches.filter((b) => b && b.active !== false)
+      : [];
+  } catch (err) {
+    console.error("Schema branch fetch error:", err);
+    return [];
+  }
+}
+
+/* =========================================================
+   SCHEMA GRAPH GENERATOR
+========================================================= */
+
+function buildJsonLdGraph(branches) {
+  // Map dynamic branches into Schema.org format
+  const branchSchemas = branches.map((branch) => {
+    const slug = branch.slug || branch.id;
+    const branchUrl = `${SITE_URL}/locations/${slug}`;
+
+    return {
+      "@type": "DryCleaningOrLaundry",
+      "@id": `${branchUrl}#business`,
+      name: `Rapid Laundromat - ${branch.name}`,
+      url: branchUrl,
+      telephone: branch.phone || undefined,
+      email: branch.email || undefined,
+      priceRange: "$$",
+      currenciesAccepted: "LKR",
+      paymentAccepted: "Cash, Credit Card, Bank Transfer",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: branch.address || "",
+        addressLocality: branch.district || "",
+        addressRegion: branch.province || "",
+        addressCountry: "LK",
+      },
+      ...(branch.latitude && branch.longitude
+        ? {
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: Number(branch.latitude),
+              longitude: Number(branch.longitude),
+            },
+          }
+        : {}),
+    };
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: `${SITE_URL}`,
+        name: SITE_NAME,
+        alternateName: ["Rapid", "Rapid Laundromat Sri Lanka"],
+        publisher: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+        inLanguage: "en-LK",
+      },
+      {
+        "@type": "DryCleaningOrLaundry",
+        "@id": `${SITE_URL}/#organization`,
+        name: SITE_NAME,
+        alternateName: "Rapid Laundromat",
+        url: `${SITE_URL}`,
+        logo: {
+          "@type": "ImageObject",
+          url: `${SITE_URL}/icon-512.png`,
+          width: 512,
+          height: 512,
+        },
+        image: `${SITE_URL}/images/og-cover.jpg`,
+        priceRange: "$$",
+        currenciesAccepted: "LKR",
+        paymentAccepted: "Cash, Credit Card, Bank Transfer",
+        areaServed: [
+          { "@type": "AdministrativeArea", name: "Sri Lanka" },
+        ],
+        // Service Catalog (Signals offerings that exist as homepage sections)
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Laundry & Garment Care Services",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Dry Cleaning",
+                description:
+                  "Professional delicate fabric, designer wear, and suit dry cleaning.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Commercial Laundry",
+                description:
+                  "Bulk linen, hotel, restaurant, and corporate laundering contracts.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Wash & Fold",
+                description:
+                  "Everyday laundry wash, dry, and clean fold solutions.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Steam Pressing & Ironing",
+                description:
+                  "High-pressure steam pressing and wrinkle removal.",
+              },
+            },
+          ],
+        },
+        // Attaches all active branches dynamically
+        subOrganization: branchSchemas,
+      },
     ],
-  },
-
-  category:
-    "Laundry Service",
-};
-
+  };
+}
 
 /* =========================================================
-   ORGANIZATION STRUCTURED DATA
+   ROOT LAYOUT (ASYNC SERVER COMPONENT)
 ========================================================= */
 
-const organizationSchema = {
-  "@context":
-    "https://schema.org",
-
-  "@type":
-    "Organization",
-
-  "@id":
-    `${SITE_URL}/#organization`,
-
-  name:
-    SITE_NAME,
-
-  alternateName:
-    "Rapid",
-
-  url:
-    `${SITE_URL}/`,
-
-  logo: {
-    "@type":
-      "ImageObject",
-
-    url:
-      `${SITE_URL}/icon-512.png`,
-
-    width:
-      512,
-
-    height:
-      512,
-  },
-
-  sameAs: [
-    // Add official social links when ready
-    // "https://www.facebook.com/...",
-    // "https://www.instagram.com/...",
-  ],
-};
-
-
-/* =========================================================
-   WEBSITE STRUCTURED DATA
-========================================================= */
-
-const websiteSchema = {
-  "@context":
-    "https://schema.org",
-
-  "@type":
-    "WebSite",
-
-  "@id":
-    `${SITE_URL}/#website`,
-
-  url:
-    `${SITE_URL}/`,
-
-  name:
-    SITE_NAME,
-
-  alternateName: [
-    "Rapid",
-    "Rapid Laundromat Sri Lanka",
-  ],
-
-  publisher: {
-    "@id":
-      `${SITE_URL}/#organization`,
-  },
-
-  inLanguage:
-    "en-LK",
-};
-
-
-/* =========================================================
-   ROOT LAYOUT
-========================================================= */
-
-export default function RootLayout({
-  children,
-}) {
-  const measurementId =
-    process.env
-      .NEXT_PUBLIC_GA_MEASUREMENT_ID;
+export default async function RootLayout({ children }) {
+  const branches = await getBranchesForSchema();
+  const jsonLdGraph = buildJsonLdGraph(branches);
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
-    <html
-      lang="en-LK"
-      data-scroll-behavior="smooth"
-    >
+    <html lang="en-LK" data-scroll-behavior="smooth">
       <body
-        className={`
-          ${barlow.variable}
-          ${barlowCondensed.variable}
-        `}
+        className={`${barlow.variable} ${barlowCondensed.variable} antialiased`}
       >
-
-        {/* =================================================
-            ORGANIZATION SCHEMA
-        ================================================= */}
-
-        <Script
-          id="organization-schema"
+        {/* Instant server-rendered JSON-LD schema for Googlebot */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                organizationSchema
-              ),
+            __html: JSON.stringify(jsonLdGraph),
           }}
         />
-
-
-        {/* =================================================
-            WEBSITE SCHEMA
-        ================================================= */}
-
-        <Script
-          id="website-schema"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                websiteSchema
-              ),
-          }}
-        />
-
-
-        {/* =================================================
-            APPLICATION
-        ================================================= */}
 
         {children}
 
-
-        {/* =================================================
-            GOOGLE ANALYTICS
-        ================================================= */}
-
-        {measurementId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-              strategy="afterInteractive"
-            />
-
-            <Script
-              id="google-analytics"
-              strategy="afterInteractive"
-            >
-              {`
-                window.dataLayer =
-                  window.dataLayer || [];
-
-                function gtag() {
-                  window.dataLayer.push(
-                    arguments
-                  );
-                }
-
-                gtag(
-                  'js',
-                  new Date()
-                );
-
-                gtag(
-                  'config',
-                  '${measurementId}',
-                  {
-                    send_page_view: true
-                  }
-                );
-              `}
-            </Script>
-          </>
-        )}
-
+        {/* Optimized GA4 via official Next.js third-party package */}
+        {measurementId && <GoogleAnalytics gaId={measurementId} />}
       </body>
     </html>
   );
